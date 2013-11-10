@@ -8,11 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface ViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>{
+    NSInputStream *inputStream;
+    NSOutputStream *outputStream;
+
+}
 
 -(IBAction)doneButtonPressed:(id)sender;
 -(IBAction)sliderDidChange:(id)sender;
 -(IBAction)switchChanged:(id)sender;
+-(IBAction)disconnect:(id)sender;
+@property (strong,nonatomic) NSMutableArray *jsondata;
 @property (strong,nonatomic) UIColor *imagecolor;
 @property (strong,nonatomic) IBOutlet UITableView *tableView;
 @end

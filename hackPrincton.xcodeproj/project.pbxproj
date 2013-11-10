@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0364625F182F45F30056A423 /* raspiconnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 0364625E182F45F30056A423 /* raspiconnection.m */; };
+		0367EB39182F8E7C004A12FB /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0367EB38182F8E7C004A12FB /* libicucore.dylib */; };
+		0367EB3B182F8E86004A12FB /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0367EB3A182F8E86004A12FB /* CFNetwork.framework */; };
+		0367EB3D182F8E8F004A12FB /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0367EB3C182F8E8F004A12FB /* Security.framework */; };
 		03F05C44182DE21400E99A23 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03F05C43182DE21400E99A23 /* Foundation.framework */; };
 		03F05C46182DE21400E99A23 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03F05C45182DE21400E99A23 /* CoreGraphics.framework */; };
 		03F05C48182DE21400E99A23 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03F05C47182DE21400E99A23 /* UIKit.framework */; };
@@ -42,6 +46,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0364625D182F45F30056A423 /* raspiconnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = raspiconnection.h; sourceTree = "<group>"; };
+		0364625E182F45F30056A423 /* raspiconnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = raspiconnection.m; sourceTree = "<group>"; };
+		0367EB38182F8E7C004A12FB /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
+		0367EB3A182F8E86004A12FB /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		0367EB3C182F8E8F004A12FB /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		03F05C40182DE21400E99A23 /* hackPrincton.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hackPrincton.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		03F05C43182DE21400E99A23 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		03F05C45182DE21400E99A23 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -82,9 +91,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				03F05C44182DE21400E99A23 /* Foundation.framework in Frameworks */,
+				0367EB3D182F8E8F004A12FB /* Security.framework in Frameworks */,
+				0367EB3B182F8E86004A12FB /* CFNetwork.framework in Frameworks */,
+				0367EB39182F8E7C004A12FB /* libicucore.dylib in Frameworks */,
 				03F05C46182DE21400E99A23 /* CoreGraphics.framework in Frameworks */,
 				03F05C48182DE21400E99A23 /* UIKit.framework in Frameworks */,
-				03F05C44182DE21400E99A23 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -104,6 +116,8 @@
 		03F05C37182DE21300E99A23 = {
 			isa = PBXGroup;
 			children = (
+				0364625D182F45F30056A423 /* raspiconnection.h */,
+				0364625E182F45F30056A423 /* raspiconnection.m */,
 				03F05C49182DE21400E99A23 /* hackPrincton */,
 				03F05C68182DE21400E99A23 /* hackPrinctonTests */,
 				03F05C42182DE21400E99A23 /* Frameworks */,
@@ -123,6 +137,9 @@
 		03F05C42182DE21400E99A23 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0367EB3C182F8E8F004A12FB /* Security.framework */,
+				0367EB3A182F8E86004A12FB /* CFNetwork.framework */,
+				0367EB38182F8E7C004A12FB /* libicucore.dylib */,
 				03F05C43182DE21400E99A23 /* Foundation.framework */,
 				03F05C45182DE21400E99A23 /* CoreGraphics.framework */,
 				03F05C47182DE21400E99A23 /* UIKit.framework */,
@@ -271,6 +288,7 @@
 			knownRegions = (
 				en,
 				Base,
+				English,
 			);
 			mainGroup = 03F05C37182DE21300E99A23;
 			productRefGroup = 03F05C41182DE21400E99A23 /* Products */;
@@ -318,6 +336,7 @@
 				03F05C93182EE23600E99A23 /* AnimatedTransitioning.m in Sources */,
 				03F05C54182DE21400E99A23 /* AppDelegate.m in Sources */,
 				03F05C94182EE23600E99A23 /* TransitionDelegate.m in Sources */,
+				0364625F182F45F30056A423 /* raspiconnection.m in Sources */,
 				03F05C50182DE21400E99A23 /* main.m in Sources */,
 				03F05C87182E1E4E00E99A23 /* UIImage-JTColor.m in Sources */,
 			);
@@ -450,6 +469,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "hackPrincton/hackPrincton-Prefix.pch";
 				INFOPLIST_FILE = "hackPrincton/hackPrincton-Info.plist";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -464,6 +484,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "hackPrincton/hackPrincton-Prefix.pch";
 				INFOPLIST_FILE = "hackPrincton/hackPrincton-Info.plist";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -530,6 +551,7 @@
 				03F05C74182DE21400E99A23 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		03F05C75182DE21400E99A23 /* Build configuration list for PBXNativeTarget "hackPrinctonTests" */ = {
 			isa = XCConfigurationList;
@@ -538,6 +560,7 @@
 				03F05C77182DE21400E99A23 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -8,6 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
-@interface collectionViewController : UICollectionViewController
-- (IBAction)displaySecondVC:(id)sender;
+
+@interface collectionViewController : UICollectionViewController {
+    NSInputStream *inputStream;
+    NSOutputStream *outputStream;
+    NSArray *values;
+
+}
+//@property (strong,nonatomic) NSInputStream *inputStream;
+//@property (strong,nonatomic) NSOutputStream *outputStream;
+//- (IBAction)displaySecondVC:(id)sender;
+//- (void)initNetworkCommunication;
 @end

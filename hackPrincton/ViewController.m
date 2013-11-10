@@ -9,34 +9,45 @@
 #import "ViewController.h"
 #import "colorCell.h"
 #import "UIImage-JTColor.h"
+#import "collectionViewController.h"
+#import "switcherCell.h"
+
 
 @interface ViewController ()
 
 @end
 
 @implementation ViewController
-@synthesize imagecolor,tableView;
+@synthesize imagecolor,tableView,jsondata;
 
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self initNetworkCommunication];
+    [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(connectmsg:) name:@"getArray" object:nil];
+    //[self connectmsg:Nil];
 
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-   /* UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back"
-                                                                   style:UIBarButtonItemStylePlain
-                                                                  target:nil
-                                                                  action:nil];
-    self.navigationItem.backBarButtonItem = backButton;*/
     
 }
+-(IBAction)connectmsg:(id)sender{
+    NSLog(@"is connecting");
+    [self sendMessage:@"connect"];
+}
 -(IBAction)doneButtonPressed:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self sendMessage:@"exit"];
+    [self.tableView reloadData];
     
+}
+-(IBAction)disconnect:(id)sender{
+   [self dismissViewControllerAnimated:YES completion:nil];
+    [outputStream close];
+    [inputStream close];
 }
 
 - (void)didReceiveMemoryWarning
@@ -56,18 +67,37 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return 1;
+    return [self.jsondata count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"colorCell";
-    colorCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    UIColor *rgbColor = [UIColor colorWithRed:cell.red.value/255 green:cell.green.value/255 blue:cell.blue.value/255 alpha:1];
-    UIImage *rgbImage = [UIImage imageWithColor:rgbColor];
-    cell.color.image=rgbImage;
-    // Configure the cell...
-    
+    NSString *celliden;
+    /*NSLog([[jsondata objectAtIndex:indexPath.row] isEqual:@"(colors)"] ? @"Yes" : @"No");
+    NSLog(@"%@",[jsondata objectAtIndex:indexPath.row]);
+    NSString *first=[jsondata objectAtIndex:indexPath.row];
+    NSLog(@"string: %@",first);
+    if ([first isEqual:@"(colors)"]){
+        celliden=@"colorCell";
+        NSString *CellIdentifier = [NSString stringWithString:celliden];
+        colorCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+        UIColor *rgbColor = [UIColor colorWithRed:cell.red.value/255 green:cell.green.value/255 blue:cell.blue.value/255 alpha:1];
+        UIImage *rgbImage = [UIImage imageWithColor:rgbColor];
+        cell.color.image=rgbImage;
+        return cell;
+    }else {
+        celliden=@"switchCell";
+        NSString *CellIdentifier = [NSString stringWithString:celliden];
+        switcherCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+        return cell;
+
+    }*/
+    celliden=@"Cell";
+    NSString *CellIdentifier = [NSString stringWithString:celliden];
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    NSString *first=[jsondata objectAtIndex:indexPath.row];
+    NSLog(@"%@",first);
+    cell.textLabel.text=[NSString stringWithString:first];
     return cell;
 }
 
@@ -97,6 +127,19 @@
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
     //figure out what cell it is
 }
+
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    [self sendMessage:cell.textLabel.text];
+    //[[raspiconnection alloc] sendMessage:cell.textLabel.text];
+    
+}
+/*-(void)updateArray:(NSNotification *)notification{
+    jsondata=[NSMutableArray arrayWithArray:notification.object];
+    [self.tableView reloadData];
+}*/
 
 
 /*
@@ -149,5 +192,109 @@
 }
 
  */
+
+- (void)stream:(NSStream *)theStream handleEvent:(NSStreamEvent)streamEvent {
+	switch (streamEvent) {
+            
+		case NSStreamEventOpenCompleted:
+			NSLog(@"Stream opened");
+			break;
+            
+		case NSStreamEventHasBytesAvailable:
+            NSLog(@"bytesAvailable");
+            if (theStream == inputStream) {
+                
+                uint8_t buffer[1024];
+                int len;
+                
+                while ([inputStream hasBytesAvailable]) {
+                    
+                    len = [inputStream read:buffer maxLength:sizeof(buffer)];
+                    if (len > 0) {
+                        
+                        NSString *output = [[NSString alloc] initWithBytes:buffer length:len encoding:NSASCIIStringEncoding];
+                        [self messageReceived:output];
+                        NSLog(@"Json String: %@",output);
+                        if (nil != output) {
+                            NSLog(@"server said: %@", output);
+                            
+                            
+                        }
+                    }
+                }
+            }
+            
+            break;
+            
+            
+		case NSStreamEventErrorOccurred:
+            NSLog(@"Can not connect to the host!");
+			break;
+            
+		case NSStreamEventEndEncountered:
+            NSLog(@"event end encountered");
+			break;
+            
+		default:
+            NSLog(@"Unknown event");
+            break;
+	}
+    
+}
+
+- (void)initNetworkCommunication {
+    
+    CFReadStreamRef readStream;
+    CFWriteStreamRef writeStream;
+    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"192.168.2.2", 9898 , &readStream, &writeStream);
+    inputStream = (NSInputStream *)CFBridgingRelease(readStream);
+    outputStream = (NSOutputStream *)CFBridgingRelease(writeStream);
+    
+    [inputStream setDelegate:self];
+    [outputStream setDelegate:self];
+    
+    [inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    [outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    
+    [inputStream open];
+    [outputStream open];
+    
+}
+
+- (void)sendMessage:(NSString *)msg {
+    //[self initNetworkCommunication];
+    NSString *response  = [NSString stringWithFormat:@"%@%@",msg,@""];
+    NSLog(@"response: %@",response);
+	NSData *data = [[NSData alloc] initWithData:[response dataUsingEncoding:NSASCIIStringEncoding]];
+	[outputStream write:[data bytes] maxLength:[data length]];
+    
+}
+- (void) messageReceived:(NSString *)message {
+    NSLog(@"message reveived");
+    NSString *strippedNumber = [message stringByReplacingOccurrencesOfString:@"[" withString:@""];
+    
+    NSString * strippedNumber2 = [strippedNumber stringByReplacingOccurrencesOfString:@"]" withString:@""];
+    
+    NSString * strippedNumber3 = [strippedNumber2 stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+    
+    NSString * strippedNumber4 = [strippedNumber3 stringByReplacingOccurrencesOfString:@" " withString:@""];
+    
+    NSArray *array = [strippedNumber4 componentsSeparatedByString:@","];
+    NSLog(@"Output Array: %@",array);
+    jsondata=[NSMutableArray arrayWithArray:array];
+    NSLog(@"jsondata Array: %@",array);
+    [self.tableView reloadData];
+    
+    
+}
+
+-(void)sendback{
+    NSString *response  = @"exit\n";
+    NSData *data = [[NSData alloc] initWithData:[response dataUsingEncoding:NSASCIIStringEncoding]];
+    [outputStream write:[data bytes] maxLength:[data length]];
+    
+    NSString *res = [NSString stringWithUTF8String:[data bytes]];
+    NSLog(@"Data: %@",res);
+}
 
 @end
